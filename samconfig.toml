@@ -1,0 +1,11 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "modularclmsearch"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-13x6xui26x325"
+s3_prefix = "modularclmsearch"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "DocumentsBucketName=\"modularclmsearch-documents\" StagingBucketName=\"modularclmsearch-staging\" QueuedBucketName=\"modularclmsearch-queued\" ESdomain=\"https://search-modularsearch-5mfdk3m2s764jmcsuxh6atuo6u.us-east-1.es.amazonaws.com\""
