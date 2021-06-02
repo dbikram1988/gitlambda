@@ -48,7 +48,7 @@ const processDocument = async (event) => {
   // Get object info
   const Bucket = event.s3.bucket.name
   const Key = decodeURIComponent(event.s3.object.key.replace(/\+/g, ' '))
-  
+    
   console.log(`Bucket: ${Bucket}, Key: ${Key}`)
 
   // Get content from source S3 object
@@ -56,18 +56,6 @@ const processDocument = async (event) => {
     Bucket,
     Key
   }).promise()
-
-  // Get meta data from S3 object
-  const metaData = await s3.headObject({ Bucket, Key }).promise();
-  const Metadata = metaData.Metadata
-
-  // If any meta data present in the uploaded s3 object then pass it to next process
-  if(Metadata == null || Metadata == undefined)
-    Metadata = {}
-
-    // Adding an additional metadata for object url
-    Metadata['url'] = `https://${Bucket}.s3.amazonaws.com/${Key}`
-
 
   try {
     // Extract text from PDF
@@ -79,8 +67,7 @@ const processDocument = async (event) => {
       Bucket: process.env.OutputBucket,
       Key: `pdf/${Key}.txt`,
       Body: data.text,
-      ContentType: 'application/text',
-      Metadata: Metadata
+      ContentType: 'application/text'
     }).promise())
 
   } catch (err) {
