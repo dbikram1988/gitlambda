@@ -1,12 +1,32 @@
 pipeline {
-  agent any
- 
-  stages {
-    stage('Invole Lambda Test Runner') {
-      steps {
-        lambdaTestRunner branch: 'main', command: 'npm run coverage', functionName: 'arn:aws:lambda:us-east-1:652488947426:function:modularclmsearch-ProcessPDFFunction-1IAJIYE9HPJL0', region: 'us-east-1', repoUri: 'https://github.com/dbikram1988/gitlambda', s3Bucket: 'sam-jenkins-demo-us-east-1-bikram', storeToS3: ''
-      }
+    agent any
+    environment {
+        REPO_URL = 'https://github.com/dbikram1988/gitlambda'
     }
-   
-  }
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Pull code and build'
+                git credentialsId: 'dbikram1988', url: "${REPO_URL}"
+                bat 'npm install'
+                bat 'npm run build'
+            }
+        }
+        
+        stage('Vulnerability assesment'){
+            input {
+                message "Confirm no new vulnerabilities have been discovered."
+                ok "Confirm"
+            }
+            steps{
+                echo 'Vulnerability check passed'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Run tests and publish results'
+                bat 'npm run test'
+            }
+        }
+    }    
 }
