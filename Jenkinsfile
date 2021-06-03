@@ -1,31 +1,26 @@
 pipeline {
     agent any
-    environment {
-        REPO_URL = 'https://github.com/dbikram1988/gitlambda'
-    }
+    tools {nodejs "node"}
     stages {
-        stage('Build') {
-            steps {
-                echo 'Pull code and build'
-                bat 'npm install'
-                bat 'npm run build'
-            }
-        }
         
-        stage('Vulnerability assesment'){
-            input {
-                message "Confirm no new vulnerabilities have been discovered."
-                ok "Confirm"
-            }
-            steps{
-                echo 'Vulnerability check passed'
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Run tests and publish results'
-                bat 'npm run test'
-            }
-        }
-    }    
+    stage('Git') {
+      steps {
+        git 'https://github.com/****/****'
+      }
+    }
+     
+    stage('Build') {
+      steps {
+        sh 'npm install'
+         sh '<<Build Command>>'
+      }
+    }  
+    
+            
+    stage('Test') {
+      steps {
+        sh 'node test'
+      }
+    }
+  }
 }
