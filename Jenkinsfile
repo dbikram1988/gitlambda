@@ -7,7 +7,6 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Pull code and build'
-                git credentialsId: 'dbikram1988', url: "${REPO_URL}"
                 bat 'npm install'
                 bat 'npm run build'
             }
