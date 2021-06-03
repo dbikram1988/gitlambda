@@ -5,7 +5,7 @@ pipeline {
         
     stage('Git') {
       steps {
-        git 'https://github.com/****/****'
+        git 'https://github.com/dbikram1988/gitlambda'
       }
     }
      
